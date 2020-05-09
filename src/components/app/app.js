@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header } from '../index';
+import Header from '../header/header';
 
 const App = () => (
     <Header/>
