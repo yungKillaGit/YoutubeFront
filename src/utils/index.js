@@ -1,2 +1,2 @@
 export { getMainLinks, getFooterLinks } from './data-provider';
-export { formatErrors } from './error-formatter';
+export { createValidationMessages, createValidationMessagesFromErrors, validate } from './validation-helper';
