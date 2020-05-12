@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import {
   Container, TextField, Grid, Button,
 } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import {
   createValidationMessages,
   createValidationMessagesFromErrors,
   validate,
 } from '../../utils';
+import ImageCapture from '../image-capture/image-capture';
 
 const defaultErrorProps = createValidationMessages([
   'email', 'name', 'password', 'repassword', 'birthDay',
@@ -18,15 +19,16 @@ const defaultErrorProps = createValidationMessages([
 const RegisterPage = () => {
   const firstRender = useRef(true);
 
-  const [email, setEmail] = useState('test4@domain.com');
-  const [name, setName] = useState('Артур');
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('Вася');
   const [password, setPassword] = useState('test12');
   const [repassword, setRepassword] = useState('test12');
-  const [birthDay, setBirthDay] = useState('');
+  const [birthDay, setBirthDay] = useState('1999-08-17');
   const [isDisabled, setDisabled] = useState(false);
   const [validationMessages, setValidationMessages] = useState(defaultErrorProps);
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertSeverity, setAlertSeverity] = useState('error');
+  const [picture, setPicture] = useState();
 
   useEffect(() => {
     if (firstRender.current) {
@@ -36,7 +38,7 @@ const RegisterPage = () => {
     const validationResult = validate({ email, password }, validationMessages);
     setValidationMessages(validationResult.newValidationMessages);
     setDisabled(!validationResult.isOk);
-  }, [email, name, password, repassword, birthDay, validationMessages]);
+  }, [email, name, password, repassword, birthDay]);
 
   const register = () => {
     const formData = new FormData();
@@ -44,6 +46,7 @@ const RegisterPage = () => {
     formData.append('name', name);
     formData.append('password', password);
     formData.append('birthDay', birthDay);
+    formData.append('picture', picture);
     axios.post('https://localhost:5001/api/auth/register', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -57,7 +60,6 @@ const RegisterPage = () => {
       const responseBody = error.response.data;
       // Если свойства errors нет, то эту ошибку выбросил валидатор.
       if (!responseBody.errors) {
-        console.log('check');
         const newValidationMessages = createValidationMessagesFromErrors(error.response.data, validationMessages);
         setValidationMessages(newValidationMessages);
       } else {
@@ -90,6 +92,10 @@ const RegisterPage = () => {
           {...validationMessages.BirthDay}
         />
         <Grid container>
+          <div className="mt-2">Изображение профиля: </div>
+          <ImageCapture mediaType="image" setImage={setPicture} />
+        </Grid>
+        <Grid container>
           <TextField
             label="Пароль"
             type="password"
@@ -119,7 +125,7 @@ const RegisterPage = () => {
             onClick={register}
             disabled={isDisabled}
           >
-            Войти
+            Создать аккаунт
           </Button>
         </Grid>
       </Grid>

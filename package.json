@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.9.13",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.52",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "jwt-decode": "^2.2.0",
@@ -18,7 +19,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "lint": "eslint ."
+    "lint": "eslint --fix ."
   },
   "browserslist": {
     "production": [

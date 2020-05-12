@@ -12,14 +12,14 @@ const defaultErrorProps = createValidationMessages(['email', 'password']);
 
 const LoginPage = () => {
   const firstRender = useRef(true);
+  const { setAuthInfo } = useAuth();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [validationMessages, setValidationMessages] = useState(defaultErrorProps);
   const [isLogged, setLogged] = useState(false);
   const [isDisabled, setDisabled] = useState(false);
-  const [isAlert, setAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const { setAuthInfo } = useAuth();
+  const [alertMessage, setAlertMessage] = useState(null);
 
   useEffect(() => {
     if (firstRender.current) {
@@ -49,7 +49,6 @@ const LoginPage = () => {
         setValidationMessages(newValidationMessages);
       } else {
         setAlertMessage(responseBody.errors[0].description);
-        setAlert(true);
       }
     });
   };
@@ -76,8 +75,8 @@ const LoginPage = () => {
           {...validationMessages.Password}
         />
         {
-          isAlert ? (
-            <Alert className="mt-3" severity="error" onClose={() => setAlert(false)}>
+          alertMessage ? (
+            <Alert className="mt-3" severity="error" onClose={() => setAlertMessage(null)}>
               <AlertTitle>Error</AlertTitle>
               {alertMessage}
             </Alert>
@@ -99,4 +98,4 @@ const LoginPage = () => {
   );
 };
 
-export default React.memo(LoginPage);
+export default LoginPage;

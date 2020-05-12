@@ -7,14 +7,13 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props => isAuthenticated ? (
-          <Component {...props} />
+      render={(props) => (isAuthenticated ? (
+        <Component {...props} />
       ) : (
-          <Redirect to="/login" />
-      )
-      }
+        <Redirect to="/login" />
+      ))}
     />
   );
 };
 
-export default PrivateRoute;
+export default React.memo(PrivateRoute);

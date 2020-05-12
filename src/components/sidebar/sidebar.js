@@ -9,9 +9,9 @@ const footerLinks = getFooterLinks();
 
 const Sidebar = () => (
   <Grid container wrap="nowrap" direction="column" className="vertical-nav-bar w-100">
-    <LinkList items={mainLinks}/>
+    <LinkList items={mainLinks} />
     <Grid component="footer" container direction="column">
-      <LinkList items={footerLinks}/>
+      <LinkList items={footerLinks} />
     </Grid>
   </Grid>
 );

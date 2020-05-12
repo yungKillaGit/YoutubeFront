@@ -21,15 +21,15 @@ const Header = () => {
       <Grid container justify="space-between" wrap="nowrap" className="main-header-content">
         <Grid container item xs={3}>
           <Grid container item direction="column" xs={3}>
-            <MenuIcon/>
+            <MenuIcon />
           </Grid>
           <Grid container item direction="column" xs={9}>
-            <CardMedia image={logo} className="w-25 h-50"/>
+            <CardMedia image={logo} className="w-25 h-50" />
           </Grid>
         </Grid>
         <Grid container item xs={6}>
           <Grid item xs={10}>
-            <TextField placeholder="Введите запрос" fullWidth/>
+            <TextField placeholder="Введите запрос" fullWidth />
           </Grid>
           <Grid item xs={2}>
             <IconButton type="submit" aria-label="search">
@@ -43,7 +43,7 @@ const Header = () => {
               <Avatar>{user.name.charAt(0)}</Avatar>
             ) : (
               <>
-                <AccountBoxIcon className="mr-3"/>
+                <AccountBoxIcon className="mr-3" />
                 <Link to="login">Войти</Link>
               </>
             )
