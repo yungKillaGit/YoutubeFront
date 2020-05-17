@@ -31,4 +31,4 @@ const ImageCapture = ({ setImage }) => {
   );
 };
 
-export default ImageCapture;
+export default React.memo(ImageCapture);

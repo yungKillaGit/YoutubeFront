@@ -22,6 +22,7 @@ export const getMainLinks = () => [
   {
     text: 'Ваши видео',
     class: 'main-nav-link border-bottom',
+    route: '/your-videos',
   },
 ];
 

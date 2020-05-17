@@ -4,15 +4,21 @@ import {
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
+import { Redirect, useHistory } from 'react-router-dom';
 import {
   createValidationMessages,
   createValidationMessagesFromErrors,
   validate,
 } from '../../utils';
+import { useAuth } from '../../context/auth';
 
 const defaultValidationMessages = createValidationMessages(['name']);
 
-const RegisterChannel = () => {
+const RegisterChannel = (props) => {
+  const { location } = props;
+  const { state } = location;
+  const history = useHistory();
+  const { user, isAuthenticated, setUserInfo } = useAuth();
   const firstRender = useRef(true);
 
   const [description, setDescription] = useState('');
@@ -32,12 +38,30 @@ const RegisterChannel = () => {
     setDisabled(!validationResult.isOk);
   }, [name]);
 
+  if (!isAuthenticated) {
+    return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />;
+  }
+
+  if (alertSeverity === 'info') {
+    setTimeout(() => {
+      if (state && state.from) {
+        history.replace(state.from);
+      } else {
+        history.replace('/');
+      }
+    }, 0);
+  }
+
   const registerChannel = () => {
     axios.post('https://localhost:5001/api/channels', { name, description })
       .then((response) => {
         if (response.status === 200) {
           setAlertSeverity('info');
           setAlertMessage('Поздравляю. Вы успешно создали канал');
+          const { channel } = response.data;
+          const userWithChannel = { ...user };
+          userWithChannel.channel = channel;
+          setUserInfo(userWithChannel);
         }
       })
       .catch((error) => {
@@ -88,4 +112,4 @@ const RegisterChannel = () => {
   );
 };
 
-export default RegisterChannel;
+export default React.memo(RegisterChannel);

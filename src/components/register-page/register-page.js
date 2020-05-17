@@ -20,14 +20,14 @@ const RegisterPage = () => {
   const firstRender = useRef(true);
 
   const [email, setEmail] = useState('');
-  const [name, setName] = useState('Вася');
+  const [name, setName] = useState('артур');
   const [password, setPassword] = useState('test12');
   const [repassword, setRepassword] = useState('test12');
   const [birthDay, setBirthDay] = useState('1999-08-17');
   const [isDisabled, setDisabled] = useState(false);
   const [validationMessages, setValidationMessages] = useState(defaultErrorProps);
   const [alertMessage, setAlertMessage] = useState(null);
-  const [alertSeverity, setAlertSeverity] = useState('error');
+  const [alertSeverity, setAlertSeverity] = useState('');
   const [picture, setPicture] = useState();
 
   useEffect(() => {
@@ -57,13 +57,17 @@ const RegisterPage = () => {
         setAlertMessage('Поздравляю. Вы успешно прошли регистрацию');
       }
     }).catch((error) => {
-      const responseBody = error.response.data;
-      // Если свойства errors нет, то эту ошибку выбросил валидатор.
-      if (!responseBody.errors) {
-        const newValidationMessages = createValidationMessagesFromErrors(error.response.data, validationMessages);
+      setAlertSeverity('error');
+      const { response } = error;
+      if (!response) {
+        setAlertMessage('Запустите сервер, предоставляющий API');
+      } else if (response.status === 500) {
+        setAlertMessage('Внутренняя ошибка сервера. Проверьте бэк');
+      } else if (response.status === 400) {
+        const newValidationMessages = createValidationMessagesFromErrors(response.data, validationMessages);
         setValidationMessages(newValidationMessages);
-      } else {
-        setAlertMessage(responseBody.errors[0].description);
+      } else if (response.data.errors) {
+        setAlertMessage(response.data.errors[0].description);
       }
     });
   };

@@ -1,21 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Container, TextField, Grid, Button,
 } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import axios from 'axios';
 import { useAuth } from '../../context/auth';
-import { createValidationMessagesFromErrors, createValidationMessages, validate } from '../../utils';
+import {
+  createValidationMessagesFromErrors,
+  createValidationMessages,
+  validate,
+} from '../../utils';
 
 const defaultErrorProps = createValidationMessages(['email', 'password']);
 
-const LoginPage = () => {
-  const firstRender = useRef(true);
-  const { setAuthInfo } = useAuth();
+const LoginPage = (props) => {
+  const { location } = props;
+  const { state } = location;
+  const history = useHistory();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const firstRender = useRef(true);
+  const { setAuthInfo, setUserInfo } = useAuth();
+
+  const [email, setEmail] = useState('test@domain.com');
+  const [password, setPassword] = useState('test');
   const [validationMessages, setValidationMessages] = useState(defaultErrorProps);
   const [isLogged, setLogged] = useState(false);
   const [isDisabled, setDisabled] = useState(false);
@@ -31,30 +39,41 @@ const LoginPage = () => {
     setDisabled(!validationResult.isOk);
   }, [email, password]);
 
-  const login = () => {
-    axios.post('https://localhost:5001/api/auth/login', {
+  const login = async () => {
+    await axios.post('https://localhost:5001/api/auth/login', {
       email,
       password,
     }).then((response) => {
       if (response.status === 200) {
         const { authToken } = response.data.token;
+        const { user } = response.data;
         setAuthInfo(authToken);
+        setUserInfo(user);
         setLogged(true);
       }
     }).catch((error) => {
-      const responseBody = error.response.data;
-      // Если свойства errors нет, то эту ошибку выбросил валидатор.
-      if (!responseBody.errors) {
+      const { response } = error;
+      if (!response) {
+        setAlertMessage('Запустите сервер, предоставляющий API');
+      } else if (response.status === 500) {
+        setAlertMessage('Внутренняя ошибка сервера. Проверьте бэк');
+      } else if (response.status === 400) {
         const newValidationMessages = createValidationMessagesFromErrors(error.response.data, validationMessages);
         setValidationMessages(newValidationMessages);
-      } else {
-        setAlertMessage(responseBody.errors[0].description);
+      } else if (response.data.errors) {
+        setAlertMessage(response.data.errors[0].description);
       }
     });
   };
 
   if (isLogged) {
-    return <Redirect to="/" />;
+    setTimeout(() => {
+      if (state && state.from) {
+        history.replace(state.from);
+      } else {
+        history.replace('/');
+      }
+    }, 0);
   }
 
   return (
@@ -98,4 +117,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default React.memo(LoginPage);

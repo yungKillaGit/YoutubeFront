@@ -17,6 +17,7 @@ import './header.css';
 
 const Header = () => {
   const { user, logout } = useAuth();
+
   return (
     <header className="mt-3 ml-3 mr-3">
       <Grid container justify="space-between" wrap="nowrap" className="main-header-content">
@@ -42,7 +43,11 @@ const Header = () => {
           {
             user ? (
               <>
-                <Avatar className="mr-3">{user.name.charAt(0)}</Avatar>
+                { user.avatarUrl ? (
+                  <Avatar className="mr-3" src={user.avatarUrl} />
+                ) : (
+                  <Avatar className="mr-3">{user.name.charAt(0)}</Avatar>
+                ) }
                 <IconButton onClick={logout}>
                   <ExitToAppIcon />
                 </IconButton>

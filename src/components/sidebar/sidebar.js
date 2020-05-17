@@ -8,10 +8,10 @@ const mainLinks = getMainLinks();
 const footerLinks = getFooterLinks();
 
 const Sidebar = () => (
-  <Grid container wrap="nowrap" direction="column" className="vertical-nav-bar w-100">
-    <LinkList items={mainLinks} />
+  <Grid container wrap="nowrap" direction="column" className="vertical-nav-bar w-100" xs={3}>
+    <LinkList items={mainLinks} linkColor={{ color: 'black' }} />
     <Grid component="footer" container direction="column">
-      <LinkList items={footerLinks} />
+      <LinkList items={footerLinks} linkColor={{ color: 'darkgray' }} />
     </Grid>
   </Grid>
 );
