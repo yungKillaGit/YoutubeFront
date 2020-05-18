@@ -74,6 +74,8 @@ const RegisterChannel = (props) => {
         } else if (response.status === 400) {
           const newValidationMessages = createValidationMessagesFromErrors(error.response.data, validationMessages);
           setValidationMessages(newValidationMessages);
+        } else if (response.status === 401) {
+          setAlertMessage('Срок действия вашего JWT токена истек. Залогиньтесь заново');
         } else if (response.data.errors) {
           setAlertMessage(response.data.errors[0].description);
         }

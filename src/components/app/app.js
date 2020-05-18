@@ -10,6 +10,7 @@ import Layout from '../layout/layout';
 import YourVideos from '../your-videos/your-videos';
 import { AuthContext } from '../../context/auth';
 import { b64toBlob } from '../../utils';
+import { useInterval } from '../../custom-hooks';
 
 const checkIfTokenExpired = (tokenFromStorage) => {
   if (tokenFromStorage !== 'null' && tokenFromStorage !== null) {
@@ -43,6 +44,12 @@ const App = () => {
       });
   };
 
+  // Раз в 30 секунд обновляем список видео на главной странице.
+  useInterval(() => {
+    fetchAllVideos();
+  }, 1000 * 30);
+
+  // Обновляем список видео на главной странице как только пользователь загружает видео.
   useEffect(() => {
     fetchAllVideos();
   }, [user]);

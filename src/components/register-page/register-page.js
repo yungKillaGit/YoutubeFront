@@ -20,10 +20,10 @@ const RegisterPage = () => {
   const firstRender = useRef(true);
 
   const [email, setEmail] = useState('');
-  const [name, setName] = useState('артур');
-  const [password, setPassword] = useState('test12');
-  const [repassword, setRepassword] = useState('test12');
-  const [birthDay, setBirthDay] = useState('1999-08-17');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [repassword, setRepassword] = useState('');
+  const [birthDay, setBirthDay] = useState('');
   const [isDisabled, setDisabled] = useState(false);
   const [validationMessages, setValidationMessages] = useState(defaultErrorProps);
   const [alertMessage, setAlertMessage] = useState(null);

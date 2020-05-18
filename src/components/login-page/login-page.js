@@ -22,8 +22,8 @@ const LoginPage = (props) => {
   const firstRender = useRef(true);
   const { setAuthInfo, setUserInfo } = useAuth();
 
-  const [email, setEmail] = useState('test@domain.com');
-  const [password, setPassword] = useState('test');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [validationMessages, setValidationMessages] = useState(defaultErrorProps);
   const [isLogged, setLogged] = useState(false);
   const [isDisabled, setDisabled] = useState(false);
